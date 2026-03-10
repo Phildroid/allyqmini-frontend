@@ -826,9 +826,15 @@
 </div>
 
 <script>
-const API = IS_LOCAL 
-          ? 'http://localhost:8000' 
-          : 'https://allyqmini-backend-p5dm.onrender.com';
+  // THIS MUST BE FIRST — before any other code
+  const IS_LOCAL = window.location.hostname === 'localhost' 
+                || window.location.hostname === '127.0.0.1'
+                || window.location.hostname === '';
+  const API = IS_LOCAL 
+            ? 'http://localhost:8000' 
+            : 'https://allyqmini-backend-p5dm.onrender.com';
+
+  // ... rest of your code below
 
 let state = {
   files: [],
