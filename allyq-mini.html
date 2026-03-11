@@ -140,7 +140,7 @@ body::before {
 
 .brand-sub {
   font-size: 8px;
-  color: var(--text3);
+  color: rgba(255, 224, 0, 0.65);
   letter-spacing: 2.5px;
   text-transform: uppercase;
   font-weight: 700;
@@ -980,7 +980,7 @@ async function send() {
     if(!r.ok) throw new Error(d.detail||'Query failed');
     const ms = Date.now()-t0;
     removeTyping(); S.latencies.push(ms); S.queries++; updateStats();
-    addBotMsg(d.answer, d.sources||[], ms);
+    addBotMsg(d.answer, d.sources||[], ms, d.model||'');
     S.history.push({role:'assistant',content:d.answer});
   } catch(e) { removeTyping(); sysMsg('Error: '+e.message); }
 }
@@ -992,13 +992,13 @@ function addUserMsg(txt) {
   document.getElementById('msgs').appendChild(el); scrollEnd();
 }
 
-function addBotMsg(txt, srcs, ms) {
+function addBotMsg(txt, srcs, ms, model) {
   const t = now();
   const srcHtml = srcs.map(s=>`<div class="src-tag">
     <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
     ${s.file} · ${s.loc}</div>`).join('');
   const el = document.createElement('div'); el.className='msg bot';
-  el.innerHTML=`<div class="avatar">AQ</div><div class="msg-body"><div class="msg-head"><span class="msg-sender">AllyQ Mini</span><span class="msg-ts">${t} · ${ms}ms</span></div><div class="bubble">${txt}</div>${srcHtml?'<div class="sources">'+srcHtml+'</div>':''}</div>`;
+  el.innerHTML=`<div class="avatar">AQ</div><div class="msg-body"><div class="msg-head"><span class="msg-sender">AllyQ Mini</span><span class="msg-ts">${t} · ${ms}ms${model ? ' · ' + model.replace('gemini-','').replace('-flash','⚡') : ''}</span></div><div class="bubble">${txt}</div>${srcHtml?'<div class="sources">'+srcHtml+'</div>':''}</div>`;
   document.getElementById('msgs').appendChild(el); scrollEnd();
 }
 
@@ -1026,7 +1026,7 @@ function clearChat() {
   S.history=[];
   const wc=document.createElement('div'); wc.className='welcome'; wc.id='welcomeCard';
   wc.innerHTML=`<img class="welcome-logo" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgODIwIDgyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDgyMHY4MjBIMHoiIGZpbGw9IiNGRkUwMDAiLz48cGF0aCBkPSJNMzY0LjUgMzYxLjZ2OTMuNmgtMjUuNnYtNTIuNUwzMjEuOCA0MjhoLTEzLjRsLTE4LjgtMjUuM3Y1Mi41aC0yMy40di05My42aDIzLjZsMjcgMzYuNyAyNC4yLTM2Ljd6TTM3MS45IDM4Mi44di0yMS4yaDg3LjR2MjEuMmgtMzAuNnY3Mi40aC0yNi4xdi03Mi40ek01NTUuNiAzNjEuNnY5My42aC0yMS41bC00NC01My41djUzLjVoLTIzLjR2LTkzLjZINDkwbDQyLjEgNTEuNnYtNTEuNnoiLz48cGF0aCBkPSJNNDEwIDU1M2MtNzUuNiAwLTE0Ni45LTE0LjEtMjAwLjctMzkuOEMxNTMgNDg2LjMgMTIyIDQ0OS43IDEyMiA0MTBzMzEtNzYuMyA4Ny4zLTEwMy4yQzI2My4xIDI4MS4xIDMzNC40IDI2NyA0MTAgMjY3czE0Ni45IDE0LjEgMjAwLjcgMzkuOEM2NjcgMzMzLjcgNjk4IDM3MC4zIDY5OCA0MTBzLTMxIDc2LjMtODcuMyAxMDMuMkM1NTYuOSA1MzguOSA0ODUuNiA1NTMgNDEwIDU1M3ptMC0yNjQuOWMtNzIuNiAwLTE0MC42IDEzLjQtMTkxLjYgMzcuOC00OC41IDIzLjItNzUuMyA1My4xLTc1LjMgODQuMnMyNi43IDYxIDc1LjMgODQuMWM1MSAyNC40IDExOS4xIDM3LjggMTkxLjYgMzcuOHMxNDAuNi0xMy40IDE5MS42LTM3LjhjNDguNS0yMy4xIDc1LjMtNTMuMSA3NS4zLTg0LjFzLTI2LjctNjEtNzUuMy04NC4xYy01MS0yNC41LTExOS0zNy45LTE5MS42LTM3Ljl6Ii8+PC9zdmc+" alt="MTN"/>
-    <h2>Y'ello! I'm AllyQ</h2><p>Upload documents to your knowledge base, then ask me anything.</p>
+    <h2>Y'ello! I'm AllyQ Mini</h2><p>Upload documents to your knowledge base, then ask me anything.</p>
     <div class="qp-grid">
       <div class="qp" onclick="sendQuick(this)">→ Summarise the key findings in this dataset</div>
       <div class="qp" onclick="sendQuick(this)">→ How many unique entries are in the data?</div>
