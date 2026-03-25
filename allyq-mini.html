@@ -1047,5 +1047,9 @@ const SESSION_ID = Math.random().toString(36).substr(2,8).toUpperCase();
 document.getElementById('sessionId').textContent='#'+SESSION_ID.substr(0,4);
 checkStatus();
 </script>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
